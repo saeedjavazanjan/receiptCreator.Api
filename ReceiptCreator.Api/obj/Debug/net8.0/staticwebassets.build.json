@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "7axmw5hiPMTAXH1o4jlO5w11Pmxgmj7NuYZX7oT2F1E=",
+  "Source": "ReceiptCreator.Api",
+  "BasePath": "_content/ReceiptCreator.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
