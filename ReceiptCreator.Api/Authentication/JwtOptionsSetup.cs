@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace NewBannerchi.Authentication;
+namespace ReceiptCreator.Api.Authentication;
 
 public class JwtOptionsSetup:IConfigureOptions<JwtOptions>
 {

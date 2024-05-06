@@ -3,18 +3,13 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using NewBannerchi.Entities;
+using ReceiptCreator.Api.Entities;
 
-namespace NewBannerchi.Authentication;
+namespace ReceiptCreator.Api.Authentication;
 
-public class JwtProvider:IJwtProvider
+public class JwtProvider(IOptions<JwtOptions> jwtOptions) : IJwtProvider
 {
-    private readonly JwtOptions _jwtOptions;
-
-    public JwtProvider(IOptions<JwtOptions> jwtOptions)
-    {
-        _jwtOptions = jwtOptions.Value;
-    }
+    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
     public async Task <string> Generate(User user)
     {

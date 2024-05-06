@@ -1,6 +1,7 @@
-﻿using NewBannerchi.Entities;
+﻿
+using ReceiptCreator.Api.Entities;
 
-namespace NewBannerchi.Authentication;
+namespace ReceiptCreator.Api.Authentication;
 
 public interface IJwtProvider
 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-namespace NewBannerchi.Authentication;
+namespace ReceiptCreator.Api.Authentication;
 
 
 public class JwtBearerOptionsSetup:IConfigureOptions<JwtBearerOptions>

@@ -1,4 +1,4 @@
-﻿namespace NewBannerchi.Authentication;
+﻿namespace ReceiptCreator.Api.Authentication;
 
 public class JwtOptions
 {
