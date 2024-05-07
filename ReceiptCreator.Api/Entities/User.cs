@@ -6,11 +6,9 @@ public class User
     public int Id { get; set; }
   
     [MaxLength(20)]
-    [Required]
     public required string Name { get; set; }
     
     [MaxLength(500)]
-    [Required]
     public required string Address { get; set; }
     
     [MaxLength(15)]
@@ -18,7 +16,6 @@ public class User
     public required string PhoneNumber { get; set; }
    
     [MaxLength(20)]
-    [Required]
     public required string PageId { get; set; }
   
     [MaxLength(20)]

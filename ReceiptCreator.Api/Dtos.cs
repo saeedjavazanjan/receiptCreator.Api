@@ -16,20 +16,14 @@ public record UserDto(
 );
 public record RegisterUserDto(
    [StringLength(20)] string CompanyName,
+   [StringLength(4)] string Password,
    [StringLength(500)] string Address,
     [Required][StringLength(12)] string PhoneNumber,
     [StringLength(20)] string PageId,
-   [Required][StringLength(20)] string JobTitle
+   [Required][StringLength(30)] string JobTitle
 );
 
-public record AddUserDto(
-    [StringLength(20)] string UserName,
-    [Required][StringLength(4)] string Password,
-    [Required] [StringLength(500)] string Address,
-    [Required] [StringLength(12)] string PhoneNumber,
-    [Required][StringLength(20)] string PageId,
-    [StringLength(20)] string JobTitle
-);
+
 public record SignInUserDto(
     [Required] [StringLength(12)] string PhoneNumber,
      [StringLength(4)] string Password
