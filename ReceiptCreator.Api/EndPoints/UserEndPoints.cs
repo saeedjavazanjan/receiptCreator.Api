@@ -117,6 +117,7 @@ public static class UserEndPoints
                               signInUserDto.PhoneNumber);
                      
                       return Results.Ok(result);
+                      //Console.WriteLine(result);
                      
                   }
                   return Results.NotFound(new { error="شما ثبت نام نکرده اید."});
@@ -167,9 +168,9 @@ public static class UserEndPoints
         group.MapPost("/signUpPasswordCheck",async (
             IJwtProvider iJwtProvider,
             IRepository iRepository,
-            AddUserDto addUserDto
+            RegisterUserDto registerUserDto
             )=>{
-            UserOtp? userOtp= await iRepository.GetUserOtpAsync(addUserDto.PhoneNumber);
+            UserOtp? userOtp= await iRepository.GetUserOtpAsync(registerUserDto.PhoneNumber);
             long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             if (userOtp ==null)
@@ -186,20 +187,20 @@ public static class UserEndPoints
 
             }
 
-            if (addUserDto.Password == userOtp!.OtpPassword )
+            if (registerUserDto.Password == userOtp!.OtpPassword )
             {
 
                 User user = new()
                 {
-                    Name = addUserDto.UserName,
-                    Address = addUserDto.Address,
-                    PhoneNumber = addUserDto.PhoneNumber,
-                    PageId = addUserDto.PageId,
-                    JobTitle = addUserDto.JobTitle
+                    Name = registerUserDto.CompanyName,
+                    Address = registerUserDto.Address,
+                    PhoneNumber = registerUserDto.PhoneNumber,
+                    PageId = registerUserDto.PageId,
+                    JobTitle = registerUserDto.JobTitle
                    
                 };
 
-                User? regesterdeUser = await iRepository.GetRegesteredPhoneNumberAsync(addUserDto.PhoneNumber);
+                User? regesterdeUser = await iRepository.GetRegesteredPhoneNumberAsync(registerUserDto.PhoneNumber);
 
                 if (regesterdeUser is not null)
                 {
@@ -212,7 +213,7 @@ public static class UserEndPoints
                     await iRepository.AddUser(user);
                  var token=  await iJwtProvider.Generate(user);
                     // var userData=Results.CreatedAtRoute(GetUser,new {user.UserId},user);
-                    return Results.Ok(new{tok=token,userData=regesterdeUser});
+                    return Results.Ok(new{tok=token,userData=user});
                 }
             }
             else
