@@ -36,3 +36,8 @@ public record UserOtpDto(
     string UserPhoneNumber,
     long Time
 );
+
+public record GetDatabaseDto(
+    IFormFile? DatabaseFile
+);
+
