@@ -36,4 +36,12 @@ public static class DataExtensions
         services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
+    
+    public static IServiceCollection AddFileService(
+        this IServiceCollection services
+    )
+    {
+        services.AddScoped<IFileService, FileService>();
+        return services;
+    }
 }

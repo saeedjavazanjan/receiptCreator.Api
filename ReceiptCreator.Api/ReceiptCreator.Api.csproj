@@ -25,4 +25,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
         <PackageReference Include="MinimalApis.Extensions" Version="0.11.0" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="files\backups\" />
+    </ItemGroup>
 </Project>
