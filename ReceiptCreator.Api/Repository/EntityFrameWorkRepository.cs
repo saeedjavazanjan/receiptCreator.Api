@@ -32,6 +32,13 @@ public class EntityFrameWorkRepository(ReceiptCreatorContext dbContext) : IRepos
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task UpdateProfileAsync(User user)
+    {
+        dbContext.Update(user);
+        await dbContext.SaveChangesAsync();
+        
+    }
+
     public async Task AddUserOtp(UserOtp userOtp)
     {
         dbContext.UsersOtp.Add(userOtp);
@@ -39,6 +46,7 @@ public class EntityFrameWorkRepository(ReceiptCreatorContext dbContext) : IRepos
         
         
     }
+    
 
     public async Task<UserOtp?> GetUserOtpAsync(string userPhoneNumber)
     {
@@ -72,6 +80,9 @@ public class EntityFrameWorkRepository(ReceiptCreatorContext dbContext) : IRepos
             .ExecuteDeleteAsync();
         
     }
+    
+    
+   
 
 
 }

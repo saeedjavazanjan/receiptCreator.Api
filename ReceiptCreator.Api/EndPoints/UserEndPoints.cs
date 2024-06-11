@@ -223,21 +223,51 @@ public static class UserEndPoints
             }
         });
         
-        group.MapDelete("/{id}",async (IRepository repository,int id)=>
-        {
+        group.MapDelete("/{id}",async (IRepository repository,int id)=> {
             User? user =await repository.GetUserAsync(id);
 
             if(user is not null){
                 await repository.DeleteUser(id); 
             }
             return Results.NoContent();   
-        });
-        group.MapDelete("userOtp/{id}",async (IRepository repository,int id)=>
-        {
+        }).RequireAuthorization();
+        group.MapDelete("userOtp/{id}",async (IRepository repository,int id)=> {
                 await repository.DeleteUserOtpAsync(id); 
             
             return Results.NoContent();   
-        });
+        }).RequireAuthorization();
+
+        group.MapPost("/updateProfile", async (
+            IRepository iRepository,
+            ClaimsPrincipal? user,
+            ProfileDataDto profileDataDto
+        ) =>
+        {
+            var userId= user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId!= null)
+            {
+                User? currentUser = await iRepository.GetUserAsync(Int32.Parse(userId));
+                if(currentUser==null){
+                    return Results.NotFound(new{error="کاربر یافت نشد."}); 
+                }
+                
+
+                currentUser.Name = profileDataDto.CompanyName;
+                currentUser.Address = profileDataDto.CompanyAddress;
+                // due to the first version company phone is page id
+                currentUser.PageId =profileDataDto.CompanyPhone;
+                currentUser.JobTitle = profileDataDto.JobTitle;
+                await iRepository.UpdateProfileAsync(currentUser);
+                return Results.Ok("به روز رسانی موفق");
+
+
+            }
+
+            return Results.NotFound(new{error="کاربر یافت نشد."});
+
+
+        }).RequireAuthorization();
+        
         return group;
     }
     
@@ -250,4 +280,7 @@ public static class UserEndPoints
         Random _rdm = new Random();
         return _rdm.Next(_min, _max).ToString();
     }
+    
+    
+    
 }
