@@ -23,12 +23,12 @@ public static class BackUpEndPoints
           if(currentUser==null){
               return Results.NotFound(new{error="کاربر یافت نشد."}); 
           }
-          var userName = currentUser.PhoneNumber;
+          var userPhoneNumber = currentUser.PhoneNumber;
           
               if (dbDto.DatabaseFile != null)
               {
-                  var fileResult =
-                      iFileService.SaveDatabase(dbDto.DatabaseFile,currentUser.PhoneNumber);
+                  var fileResult = 
+                      iFileService.SaveDatabase(dbDto.DatabaseFile,userPhoneNumber );
                   if (fileResult.Item1 == 1)
                   {
                       return Results.Ok("با موفقیت آپلود شد");
@@ -65,8 +65,8 @@ public static class BackUpEndPoints
                 return Results.NotFound(new { error = "کاربر یافت نشد." });
             }
     
-            var userName = currentUser.PhoneNumber;
-            var dbFilePath = iFileService.GetDatabasePath(userName);
+            var userphone = currentUser.PhoneNumber;
+            var dbFilePath = iFileService.GetDatabasePath(userphone);
             if (string.IsNullOrEmpty(dbFilePath.Item2) || !System.IO.File.Exists(dbFilePath.Item2))
             {
                 return Results.NotFound(new { error = "فایل دیتابیس یافت نشد." });

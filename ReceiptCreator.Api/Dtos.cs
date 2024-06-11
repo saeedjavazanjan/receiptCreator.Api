@@ -22,7 +22,14 @@ public record RegisterUserDto(
     [StringLength(20)] string PageId,
    [Required][StringLength(30)] string JobTitle
 );
-
+public record ProfileDataDto(
+   [StringLength(20)] string CompanyName,
+   [StringLength(12)] string CompanyPhone ,
+   [StringLength(500)] string CompanyAddress,
+    [StringLength(500)] string CompanyLink,
+    [StringLength(5000)] string CompanyRules,
+   [Required][StringLength(30)] string JobTitle
+);
 
 public record SignInUserDto(
     [Required] [StringLength(12)] string PhoneNumber,
