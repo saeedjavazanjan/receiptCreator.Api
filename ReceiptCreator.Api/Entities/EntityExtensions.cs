@@ -16,6 +16,19 @@ public static class EntityExtensions
 
 
     }
+    public static PanelRequestDto AsDto(this PanelRequests panelRequests)
+    {
+        return new PanelRequestDto(
+            panelRequests.Id,
+            panelRequests.Name,
+            panelRequests.Address,
+            panelRequests.PhoneNumber,
+            panelRequests.PageId,
+            panelRequests.JobTitle
+        );
+
+
+    }
   
     public static UserOtpDto AsDto(this UserOtp userOtp)
     {

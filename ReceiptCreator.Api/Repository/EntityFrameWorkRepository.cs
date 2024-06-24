@@ -80,8 +80,15 @@ public class EntityFrameWorkRepository(ReceiptCreatorContext dbContext) : IRepos
             .ExecuteDeleteAsync();
         
     }
-    
-    
+
+    public async Task AddPanelRequest(PanelRequests panelRequest)
+    {
+        dbContext.PanelRequests.Add(panelRequest);
+        await dbContext.SaveChangesAsync();
+        
+    }
+
+   
    
 
 

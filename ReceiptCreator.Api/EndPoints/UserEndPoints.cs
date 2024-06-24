@@ -268,6 +268,41 @@ public static class UserEndPoints
 
         }).RequireAuthorization();
         
+        group.MapPost("/requestPanel", async (
+            IRepository iRepository,
+            ClaimsPrincipal? user
+        ) => {
+            var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Results.Unauthorized();
+            }
+    
+            User? currentUser = await iRepository.GetUserAsync(Int32.Parse(userId));
+            if (currentUser == null)
+            {
+                return Results.NotFound(new { error = "کاربر یافت نشد." });
+            }
+
+            PanelRequests? panelRequests = new()
+            {
+                Name = currentUser.Name,
+                Address = currentUser.Address,
+                PhoneNumber = currentUser.PhoneNumber,
+                PageId = currentUser.PageId,
+                JobTitle = currentUser.JobTitle
+            };
+
+            await iRepository.AddPanelRequest(panelRequests);
+            
+            return Results.Ok("درخواست شما ثبت شد");
+        }).RequireAuthorization().DisableAntiforgery();
+
+        
+        
+        
+        
+        
         return group;
     }
     

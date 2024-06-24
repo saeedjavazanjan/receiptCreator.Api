@@ -19,6 +19,8 @@ public interface IRepository
     Task UpdateUserOtpAsync(UserOtp userOtp);
     Task DeleteUserOtpAsync(int id);
 
+    Task AddPanelRequest (PanelRequests panelRequest);
+
 
    
 
