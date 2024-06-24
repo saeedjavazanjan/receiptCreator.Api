@@ -12,6 +12,7 @@ public class ReceiptCreatorContext:DbContext
     
     public DbSet<User> Users  => Set<User>();
     public DbSet<UserOtp> UsersOtp => Set<UserOtp>();
+    public DbSet<PanelRequests> PanelRequests => Set<PanelRequests>();
 
 
 }

@@ -14,6 +14,14 @@ public record UserDto(
     string TypeOfPage,
     string JobTitle
 );
+public record PanelRequestDto(
+    int Id,
+    string Name,
+    string Address,
+    string PhoneNumber,
+    string TypeOfPage,
+    string JobTitle
+);
 public record RegisterUserDto(
    [StringLength(20)] string CompanyName,
    [StringLength(4)] string Password,
