@@ -65,6 +65,6 @@ app.UseAuthorization();
 app.MapUsersEndPoints();
 app.MapBackupEndPoints();
 app.UseRateLimiter();
-app.MapGet("version/", () =>Results.Ok( "1.2"));
+app.MapGet("version/", () =>Results.Ok( "2.0"));
 app.MapGet("/", () =>"hello world");
 app.Run();

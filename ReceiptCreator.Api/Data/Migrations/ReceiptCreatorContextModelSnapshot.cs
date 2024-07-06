@@ -16,7 +16,7 @@ namespace ReceiptCreator.Api.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -46,8 +46,8 @@ namespace ReceiptCreator.Api.Data.Migrations
 
                     b.Property<string>("PageId")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -84,8 +84,8 @@ namespace ReceiptCreator.Api.Data.Migrations
 
                     b.Property<string>("PageId")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()

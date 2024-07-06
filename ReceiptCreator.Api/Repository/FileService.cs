@@ -9,14 +9,17 @@ public class FileService:IFileService
         _environment = environment;
     }
     
-    
+    private readonly string _backupPath = "/app/files/backups";
+
     
     public Tuple<int, string> SaveDatabase(IFormFile sqlightDb, string userphone)
     {
+        
         try
         {
+
                 var contentPath = this._environment.ContentRootPath;
-                var path = Path.Combine(contentPath, "files", "backups", userphone);
+                var path = Path.Combine(_backupPath, userphone);
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -42,6 +45,7 @@ public class FileService:IFileService
                 {
                     sqlightDb.CopyTo(stream);
                 }
+                
                 return new Tuple<int, string>(1, "backups/" + userphone + "/" + newFileName);
                 
         }
@@ -58,7 +62,7 @@ public class FileService:IFileService
         try
         {
             var contentPath = this._environment.ContentRootPath;
-            var userFolderPath = Path.Combine(contentPath, "files", "backups", userphone);
+            var userFolderPath = Path.Combine(_backupPath, userphone);
 
             var dbFilePath = Path.Combine(userFolderPath, "receipt");
             return new Tuple<int, string>(1, dbFilePath);
