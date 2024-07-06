@@ -11,7 +11,7 @@ public record UserDto(
     string Name,
     string Address,
     string PhoneNumber,
-    string TypeOfPage,
+    string PageId,
     string JobTitle
 );
 public record PanelRequestDto(
@@ -19,7 +19,7 @@ public record PanelRequestDto(
     string Name,
     string Address,
     string PhoneNumber,
-    string TypeOfPage,
+    string PageId,
     string JobTitle
 );
 public record RegisterUserDto(
@@ -27,14 +27,14 @@ public record RegisterUserDto(
    [StringLength(4)] string Password,
    [StringLength(500)] string Address,
     [Required][StringLength(12)] string PhoneNumber,
-    [StringLength(20)] string PageId,
+    [StringLength(100)] string PageId,
    [Required][StringLength(30)] string JobTitle
 );
 public record ProfileDataDto(
    [StringLength(20)] string CompanyName,
    [StringLength(12)] string CompanyPhone ,
    [StringLength(500)] string CompanyAddress,
-    [StringLength(500)] string CompanyLink,
+    [StringLength(100)] string CompanyLink,
     [StringLength(5000)] string CompanyRules,
    [Required][StringLength(30)] string JobTitle
 );

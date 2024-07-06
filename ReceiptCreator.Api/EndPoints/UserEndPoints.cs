@@ -9,8 +9,8 @@ namespace ReceiptCreator.Api.Endpoints;
 
 public static class UserEndPoints
 {
-     private const  string CreatedUser="User";
     private const string GetUser = "getUser";
+    private const string SmsSender = "sendSMS";
 
     
     public static RouteGroupBuilder MapUsersEndPoints(this IEndpointRouteBuilder routes){
@@ -34,21 +34,36 @@ public static class UserEndPoints
             }
         ).WithName(GetUser).RequireAuthorization();
         
-        
-        group.MapPost("/signUp",async (
-            IRepository iRepository , 
-            RegisterUserDto registerUserDto)=>
+
+        group.MapGet("/sendSms",async (
+                String phoneNumber,
+                String password
+                )=> 
+            {
+                String result= await SendSms.SendSMS.SendSMSToUser(password,phoneNumber);
+
+                return Results.Ok(result);
+ 
+            }
+        ).WithName(SmsSender).RequireRateLimiting("fixed");
+
+
+
+
+        group.MapPost("/signUp", async (
+            IRepository iRepository,
+            RegisterUserDto registerUserDto) =>
         {
             generatedPassword = GenerateRandomNo();
 
-           
-            
+
+
             User? existedUser = await iRepository.GetRegesteredPhoneNumberAsync(registerUserDto.PhoneNumber);
-            if (existedUser is not null )
+            if (existedUser is not null)
             {
-                return Results.Conflict(new{error="با این شماره قبلا ثبت نام صورت گرفته است."});
+                return Results.Conflict(new { error = "با این شماره قبلا ثبت نام صورت گرفته است." });
             }
-            
+
             else
             {
                 UserOtp userOtp = new()
@@ -65,20 +80,28 @@ public static class UserEndPoints
                     existedUserOtp.Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                     await iRepository.UpdateUserOtpAsync(existedUserOtp);
                 }
-                else if(existedUserOtp is null)
+                else if (existedUserOtp is null)
                 {
                     await iRepository.AddUserOtp(userOtp);
 
                 }
-
-                String result= await SendSms.SendSMS.SendSMSToUser(generatedPassword,registerUserDto.PhoneNumber);
-
-                    return Results.Ok(result);
-          
                 
+                /*var routeValues = new
+                {
+                    phoneNumber = registerUserDto.PhoneNumber,
+                    password = generatedPassword
+                };
+                var result=Results.CreatedAtRoute(SmsSender,routeValues);*/
+                
+                String result= await SendSms.SendSMS.
+                    SendSMSToUser(generatedPassword,
+                        registerUserDto.PhoneNumber);
+                return Results.Ok(result);
+
+
             }
-        }) .RequireRateLimiting("fixed");
-        
+        }).RequireRateLimiting("fixed");
+
         group.MapPost("/signIn", async (
             IRepository iRepository,
             SignInUserDto signInUserDto) =>
@@ -90,8 +113,8 @@ public static class UserEndPoints
 
                   if (regesterdUser is not null )
                   {
-                      
-                       generatedPassword =  GenerateRandomNo();
+
+                      generatedPassword = GenerateRandomNo();
                       
                        if (existedUserOtp is not null)
                        {
@@ -115,14 +138,19 @@ public static class UserEndPoints
                        String result= await SendSms.SendSMS.
                           SendSMSToUser(generatedPassword,
                               signInUserDto.PhoneNumber);
-                     
+                       /*var routeValues = new
+                       {
+                           phoneNumber = signInUserDto.PhoneNumber,
+                           password = generatedPassword
+                       };
+                       var result=Results.CreatedAtRoute(SmsSender,routeValues);*/
                       return Results.Ok(result);
                       //Console.WriteLine(result);
                      
                   }
                   return Results.NotFound(new { error="شما ثبت نام نکرده اید."});
                   
-              }) .RequireRateLimiting("fixed");
+              }).RequireRateLimiting("fixed");
       
         group.MapPost("/signInPasswordCheck", async (
             IJwtProvider iJwtProvider,
@@ -254,8 +282,7 @@ public static class UserEndPoints
 
                 currentUser.Name = profileDataDto.CompanyName;
                 currentUser.Address = profileDataDto.CompanyAddress;
-                // due to the first version company phone is page id
-                currentUser.PageId =profileDataDto.CompanyPhone;
+                currentUser.PageId =profileDataDto.CompanyLink;
                 currentUser.JobTitle = profileDataDto.JobTitle;
                 await iRepository.UpdateProfileAsync(currentUser);
                 return Results.Ok("به روز رسانی موفق");

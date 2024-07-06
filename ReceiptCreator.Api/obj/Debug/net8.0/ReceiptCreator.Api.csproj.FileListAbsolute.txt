@@ -138,3 +138,5 @@ C:\Users\WebVajhegan\RiderProjects\ReceiptCreator\ReceiptCreator.Api\obj\Debug\n
 C:\Users\WebVajhegan\RiderProjects\ReceiptCreator\ReceiptCreator.Api\obj\Debug\net8.0\ReceiptCreator.Api.genruntimeconfig.cache
 C:\Users\WebVajhegan\RiderProjects\ReceiptCreator\ReceiptCreator.Api\obj\Debug\net8.0\ref\ReceiptCreator.Api.dll
 C:\Users\WebVajhegan\RiderProjects\ReceiptCreator\ReceiptCreator.Api\obj\Debug\net8.0\ReceiptCreator.Api.sourcelink.json
+C:\Users\WebVajhegan\RiderProjects\ReceiptCreator\ReceiptCreator.Api\bin\Debug\net8.0\MySqlConnector.dll
+C:\Users\WebVajhegan\RiderProjects\ReceiptCreator\ReceiptCreator.Api\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll

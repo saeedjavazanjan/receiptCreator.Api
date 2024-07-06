@@ -15,7 +15,7 @@ public class User
     [Required]
     public required string PhoneNumber { get; set; }
    
-    [MaxLength(20)]
+    [MaxLength(100)]
     public required string PageId { get; set; }
   
     [MaxLength(20)]

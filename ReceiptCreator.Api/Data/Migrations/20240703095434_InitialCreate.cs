@@ -19,7 +19,7 @@ namespace ReceiptCreator.Api.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    PageId = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PageId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     JobTitle = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
@@ -36,7 +36,7 @@ namespace ReceiptCreator.Api.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    PageId = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PageId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     JobTitle = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>

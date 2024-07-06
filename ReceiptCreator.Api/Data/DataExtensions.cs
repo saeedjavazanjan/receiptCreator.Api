@@ -20,8 +20,12 @@ public static class DataExtensions
         IConfiguration configuration
     )
     {
-        var connString=configuration.GetConnectionString("ReceiptCreatorContext");
-        services.AddSqlServer<ReceiptCreatorContext>(connString,builder => builder.UseRowNumberForPaging())
+        var connString=configuration.GetConnectionString("Production");
+        services.AddSqlServer<ReceiptCreatorContext>(connString,builder =>
+            {
+                builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                builder.UseRowNumberForPaging();
+            })
             .AddScoped<IRepository,EntityFrameWorkRepository>();
         return services;
 
