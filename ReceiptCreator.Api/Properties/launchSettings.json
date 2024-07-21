@@ -4,7 +4,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://receipt.devejumpgroup.ir",
+      "applicationUrl": "http://192.168.1.167:5047",
       "sslPort": 44350
     }
   },
@@ -13,7 +13,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "http://receipt.devejumpgroup.ir:80",
+      "applicationUrl": "http://192.168.1.167:5047",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -22,7 +22,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://receipt.devejumpgroup.ir:443;http://receipt.devejumpgroup.ir:80",
+      "applicationUrl": "https://192.168.1.167:443;http://192.168.1.167:5047",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

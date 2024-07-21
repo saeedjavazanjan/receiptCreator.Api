@@ -1,10 +1,7 @@
 ﻿namespace ReceiptCreator.Api.KavehNegar;
 
-public class SendSms
+public static class SendSms
 {
-    public static class SendSMS
-    {
-
         public static async Task<String> SendSMSToUser(String token, String receptor)
         {
 
@@ -20,7 +17,7 @@ public class SendSms
                     Console.Write(r + "r.Messageid.ToString()");
                 }
 
-                return "ارسال موفق";
+                return "Ok";
             }
             catch (Exception ex)
             {
@@ -28,6 +25,6 @@ public class SendSms
                 return ex.Message;
             }
         }
-    }
+    
 
 }
