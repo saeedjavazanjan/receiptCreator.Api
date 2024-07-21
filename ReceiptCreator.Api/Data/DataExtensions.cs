@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.UseRowNumberForPaging;
 using Microsoft.EntityFrameworkCore;
 using ReceiptCreator.Api.Authentication;
+using ReceiptCreator.Api.Endpoints;
 using ReceiptCreator.Api.Repository;
 
 namespace ReceiptCreator.Api.Data;
@@ -21,6 +22,7 @@ public static class DataExtensions
     )
     {
         var connString=configuration.GetConnectionString("Production");
+      //  var connString=configuration.GetConnectionString("ReceiptCreatorContext");
         services.AddSqlServer<ReceiptCreatorContext>(connString,builder =>
             {
                 builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
@@ -46,6 +48,17 @@ public static class DataExtensions
     )
     {
         services.AddScoped<IFileService, FileService>();
+        return services;
+    }
+
+    public static IServiceCollection AddClient(this IServiceCollection services)
+    {
+        services.AddHttpClient();
+        /*services.AddHttpClient("MyClient", client =>
+        {
+            client.BaseAddress = new Uri("http://192.168.1.167:5047/users");
+        });*/
+
         return services;
     }
 }

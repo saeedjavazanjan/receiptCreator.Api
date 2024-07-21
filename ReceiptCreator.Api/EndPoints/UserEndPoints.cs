@@ -35,76 +35,102 @@ public static class UserEndPoints
         ).WithName(GetUser).RequireAuthorization();
         
 
-        group.MapGet("/sendSms",async (
-                String phoneNumber,
-                String password
-                )=> 
-            {
-                String result= await SendSms.SendSMS.SendSMSToUser(password,phoneNumber);
-
-                return Results.Ok(result);
- 
-            }
-        ).WithName(SmsSender).RequireRateLimiting("fixed");
-
-
-
-
-        group.MapPost("/signUp", async (
-            IRepository iRepository,
-            RegisterUserDto registerUserDto) =>
+        group.MapPost("/sendOtp", async (
+            OtpDto otpDto) =>
         {
-            generatedPassword = GenerateRandomNo();
+            String result= await SendSms.SendSMSToUser(otpDto.Password, otpDto.PhoneNumber);
 
-
-
-            User? existedUser = await iRepository.GetRegesteredPhoneNumberAsync(registerUserDto.PhoneNumber);
-            if (existedUser is not null)
+            if (result.Equals("Ok"))
             {
-                return Results.Conflict(new { error = "با این شماره قبلا ثبت نام صورت گرفته است." });
-            }
+                return Results.Ok(result);
 
+            }
             else
             {
-                UserOtp userOtp = new()
+                return Results.Conflict(new { error = result });
+            }
+
+
+                
+        }).RequireRateLimiting("fixed");
+
+                   group.MapPost("/signUp", async (
+                       IRepository iRepository,
+                       RegisterUserDto registerUserDto,
+                       IHttpClientFactory httpClientFactory
+                   ) =>
+                   {
+                       generatedPassword = GenerateRandomNo();
+
+
+
+                       User? existedUser = await iRepository.GetRegesteredPhoneNumberAsync(registerUserDto.PhoneNumber);
+                       if (existedUser is not null)
+                       {
+                           return Results.Conflict(new { error = "با این شماره قبلا ثبت نام صورت گرفته است." });
+                       }
+
+                       else
+                       {
+                           UserOtp userOtp = new()
+                           {
+                               UserName = registerUserDto.CompanyName,
+                               OtpPassword = generatedPassword,
+                               PhoneNumber = registerUserDto.PhoneNumber,
+                               Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+                           };
+                           UserOtp? existedUserOtp = await iRepository.GetUserOtpAsync(registerUserDto.PhoneNumber);
+                           if (existedUserOtp is not null)
+                           {
+                               existedUserOtp.OtpPassword = generatedPassword;
+                               existedUserOtp.Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                               await iRepository.UpdateUserOtpAsync(existedUserOtp);
+                           }
+                           else if (existedUserOtp is null)
+                           {
+                               await iRepository.AddUserOtp(userOtp);
+
+                           }
+
+                           /*var routeValues = new
+                           {
+                               phoneNumber = registerUserDto.PhoneNumber,
+                               password = generatedPassword
+                           };
+                           var result=Results.CreatedAtRoute(SmsSender,routeValues);*/
+                var client = httpClientFactory.CreateClient();
+                var sendOtpResponse = await client.PostAsJsonAsync("https://receipt.devejumpgroup.ir:443/users/sendOtp",
+                    new { PhoneNumber = registerUserDto.PhoneNumber, Password = generatedPassword });
+                var result = await sendOtpResponse.Content.ReadAsStringAsync();
+
+                if (sendOtpResponse.IsSuccessStatusCode)
                 {
-                    UserName = registerUserDto.CompanyName,
-                    OtpPassword = generatedPassword,
-                    PhoneNumber = registerUserDto.PhoneNumber,
-                    Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
-                };
-                UserOtp? existedUserOtp = await iRepository.GetUserOtpAsync(registerUserDto.PhoneNumber);
-                if (existedUserOtp is not null)
-                {
-                    existedUserOtp.OtpPassword = generatedPassword;
-                    existedUserOtp.Time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                    await iRepository.UpdateUserOtpAsync(existedUserOtp);
+                    return Results.Ok(result);
                 }
-                else if (existedUserOtp is null)
+                else if((int)sendOtpResponse.StatusCode == 429)
                 {
-                    await iRepository.AddUserOtp(userOtp);
+                    return Results.Conflict(new { error="بعد از 1 دقیقه تلاش کنید"});
+                }
+                else
+                {
+                    return Results.Conflict(new { error=result});
 
                 }
-                
-                /*var routeValues = new
-                {
-                    phoneNumber = registerUserDto.PhoneNumber,
-                    password = generatedPassword
-                };
-                var result=Results.CreatedAtRoute(SmsSender,routeValues);*/
-                
-                String result= await SendSms.SendSMS.
+                /*String result= await SendSms.SendSMS.
                     SendSMSToUser(generatedPassword,
                         registerUserDto.PhoneNumber);
-                return Results.Ok(result);
+                return Results.Ok(result);*/
 
 
             }
-        }).RequireRateLimiting("fixed");
+        });
 
         group.MapPost("/signIn", async (
             IRepository iRepository,
-            SignInUserDto signInUserDto) =>
+            SignInUserDto signInUserDto,
+            IHttpClientFactory httpClientFactory
+
+            ) =>
               {
                   User? regesterdUser = await iRepository.
                       GetRegesteredPhoneNumberAsync(signInUserDto.PhoneNumber);
@@ -134,23 +160,42 @@ public static class UserEndPoints
                            await iRepository.AddUserOtp(userOtp);
 
                        }
+                       
+                       var client = httpClientFactory.CreateClient();
+                       var sendOtpResponse = await client.PostAsJsonAsync("https://receipt.devejumpgroup.ir:443/users/sendOtp",
+                           new { PhoneNumber = signInUserDto.PhoneNumber, Password = generatedPassword });
 
-                       String result= await SendSms.SendSMS.
-                          SendSMSToUser(generatedPassword,
+                       var result = await sendOtpResponse.Content.ReadAsStringAsync();
+
+                       if (sendOtpResponse.IsSuccessStatusCode)
+                       {
+                           return Results.Ok(result);
+                       }
+                       else if((int)sendOtpResponse.StatusCode == 429)
+                       {
+                           return Results.Conflict(new { error="بعد از 1 دقیقه تلاش کنید"});
+                       }
+                       else
+                       {
+                           return Results.Conflict(new { error=result});
+
+                       }
+
+                       /*String result= await SendSms.SendSMSToUser(generatedPassword,
                               signInUserDto.PhoneNumber);
                        /*var routeValues = new
                        {
                            phoneNumber = signInUserDto.PhoneNumber,
                            password = generatedPassword
                        };
-                       var result=Results.CreatedAtRoute(SmsSender,routeValues);*/
+                       var result=Results.CreatedAtRoute(SmsSender,routeValues);#1#
                       return Results.Ok(result);
-                      //Console.WriteLine(result);
+                      //Console.WriteLine(result);*/
                      
                   }
                   return Results.NotFound(new { error="شما ثبت نام نکرده اید."});
                   
-              }).RequireRateLimiting("fixed");
+              });
       
         group.MapPost("/signInPasswordCheck", async (
             IJwtProvider iJwtProvider,

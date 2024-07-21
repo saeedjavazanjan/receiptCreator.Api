@@ -13,6 +13,7 @@ builder.Services.AddRepositories(config);
 builder.Services.AddJwtProvider();
 builder.Services.AddFileService();
 builder.Services.AddAntiforgery();
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -37,7 +38,7 @@ builder.Services.ConfigureOptions<JwtOptionsSetup>();
 //builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 //builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
-
+builder.Services.AddClient();
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode=StatusCodes.Status429TooManyRequests;

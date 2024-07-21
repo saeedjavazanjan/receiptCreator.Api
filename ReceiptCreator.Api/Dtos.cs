@@ -42,6 +42,9 @@ public record ProfileDataDto(
 public record SignInUserDto(
     [Required] [StringLength(12)] string PhoneNumber,
      [StringLength(4)] string Password
+);public record OtpDto(
+    [Required] [StringLength(12)] string PhoneNumber,
+     [StringLength(4)] string Password
 );
 
 public record UserOtpDto(
